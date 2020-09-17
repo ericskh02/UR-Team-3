@@ -21,7 +21,7 @@ bool isLeftwardMode = true; // true = always follow left, false = always follow 
 
 void inputMaze() {
     fstream infile;
-    string filename = "C:\\Users\\Alex\\Downloads\\school\\UR\\test.txt";
+    string filename = "test.txt";
     infile.open(filename.c_str());
     if (infile.fail())
     {
