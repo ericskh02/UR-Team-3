@@ -79,31 +79,31 @@ void moveForward(int frontX, int frontY) {
 
 
 void checkRoute() {
-    if (isLeftwardMode) { // follow left algorithm
-        int frontX = posX, leftX = posX, rightX = posX;
-        int frontY = posY, leftY = posY, rightY = posY;
-        switch (facing) { // depends on direction the robot is facing
-        case 0:
-            ++frontY;
-            --leftX;
-            ++rightX;
-            break;
-        case 1:
-            ++frontX;
-            ++leftY;
-            --rightY;
-            break;
-        case 2:
-            --frontY;
-            ++leftX;
-            --rightX;
-            break;
-        case 3:
-            --frontX;
-            --leftY;
-            ++rightY;
-            break;
-        }
+    int frontX = posX, leftX = posX, rightX = posX;
+    int frontY = posY, leftY = posY, rightY = posY;        
+    switch (facing) { // depends on direction the robot is facing
+    case 0:
+        ++frontY;
+        --leftX;
+        ++rightX;
+        break;
+    case 1:
+        ++frontX;
+        ++leftY;
+        --rightY;
+        break;
+    case 2:
+        --frontY;
+        ++leftX;
+        --rightX;
+        break;
+    case 3:
+        --frontX;
+        --leftY;
+        ++rightY;
+        break;
+    }
+    if(isLeftwardMode){
         if (maze[leftX][leftY] != 1) { // if not a wall but is a road of exit
             changeFacing(true);
             moveForward(leftX, leftY);
@@ -114,9 +114,14 @@ void checkRoute() {
         else {
             changeFacing(false);
         }
-    }
-    else { //follow right algorithm
-     //not yet designed
+    } else {
+        if(maze[rightX][rightY] != 1){
+            changeFacing(false);
+        } else if(maze[frontX][frontY] != 1){
+            moveForward(frontX,frontY);
+        } else {
+            changeFacing(true);
+        }
     }
 }
 
