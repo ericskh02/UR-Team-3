@@ -40,7 +40,7 @@ void shortestPathCheck(int mode){
 }
 void maze(bool leftMode){
   
-  while(mazeSolved){
+  while(!mazeSolved){
     if(leftMode){
       if(left_distance<10){
         turnLeft(2000,255);
