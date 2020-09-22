@@ -3,19 +3,19 @@
 ## Functions For Robot Movement:
 
 ### 1) Perform forward movement
-moveForward(int speed);
+moveForward(int speed);\n
 moveForward(unsigned long time,int speed);
 
 ### 2) Perform left turn movement
-turnLeft(int speed);
+turnLeft(int speed);\n
 turnLeft(unsigned long time, int speed);
 
 ### 3) Perform right turn movement
-turnRight(int speed);
+turnRight(int speed);\n
 turnRight(unsigned long time, int speed);
 
 ### 4) Perform backward movement
-moveBackward(int speed);
+moveBackward(int speed);\n
 moveBackward(unsigned long time, int speed);
 
 ## Functions For Maze:
