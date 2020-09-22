@@ -12,5 +12,5 @@ turnRight(unsigned long time, int speed);
 moveBackward(int speed);
 moveBackward(unsigned long time, int speed);
 
-Functions For Maze"
+Functions For Maze:
 maze(bool leftMode);
