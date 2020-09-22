@@ -14,7 +14,7 @@ turnLeft(unsigned long time, int speed);
 turnRight(int speed);
 turnRight(unsigned long time, int speed);
 
-### 4)Perform backward movement
+### 4) Perform backward movement
 moveBackward(int speed);
 moveBackward(unsigned long time, int speed);
 
