@@ -14,3 +14,4 @@ moveBackward(unsigned long time, int speed);
 
 Functions For Maze:
 maze(bool leftMode);
+setMazeCompleted();
