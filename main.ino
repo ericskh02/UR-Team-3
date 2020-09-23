@@ -11,6 +11,8 @@
 
 NewPing ultrasonic1(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
 NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
+int left_distance = 0;
+int front_distance = 0;
 
 //Motor Setup
 #define motor1_in1 6
@@ -23,16 +25,21 @@ unsigned long previousMillis = 0;
 unsigned long currentMillis = 0;
 
 //Maze
-vector<int> travelled; // 0 = front, 1 = left, 2 = right, 3 = back
 bool mazeSolved = false;
 
 //Movement of Robot
+void stop(){
+  analogWrite(motor1_in1,0);
+  analogWrite(motor1_in2,0);
+  analogWrite(motor2_in1,0);
+  analogWrite(motor2_in2,0);  
+}
+
 void moveForward(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
   analogWrite(motor2_in1,speed);
   analogWrite(motor2_in2,0);
-  travelled.push_back(0);
 }
 
 void turnLeft(int speed){
@@ -40,7 +47,6 @@ void turnLeft(int speed){
   analogWrite(motor1_in2,speed);
   analogWrite(motor2_in1,speed);
   analogWrite(motor2_in2,0);
-  travelled.push_back(1);
 }
 
 void turnRight(int speed){
@@ -48,7 +54,6 @@ void turnRight(int speed){
   analogWrite(motor1_in2,0);
   analogWrite(motor2_in1,0);
   analogWrite(motor2_in2,speed);
-  travelled.push_back(2);
 } 
 
 void moveBackward(int speed){
@@ -58,23 +63,23 @@ void moveBackward(int speed){
   analogWrite(motor2_in2,speed);  
 }
 
-void moveForward(long time, int speed){
+void moveForward(unsigned long time, int speed){
   previousMillis = 0;
   while(true){
     currentMillis = millis();  
     if(currentMillis - previousMillis >= time){
       previousMillis = currentMillis;
-    }
       break;
     }
     analogWrite(motor1_in1,speed);
     analogWrite(motor1_in2,0);
     analogWrite(motor2_in1,speed);
     analogWrite(motor2_in2,0);
-    travelled.push_back(0);
+  }
+  stop();
 }
 
-void turnLeft(long time,int speed){
+void turnLeft(unsigned long time,int speed){
   previousMillis = 0;
   while(true){
     currentMillis = millis();
@@ -86,11 +91,11 @@ void turnLeft(long time,int speed){
     analogWrite(motor1_in2,speed);
     analogWrite(motor2_in1,speed);
     analogWrite(motor2_in2,0);
-    travelled.push_back(1);
   }
+  stop();
 }
 
-void turnRight(long time, int speed){
+void turnRight(unsigned long time, int speed){
   previousMillis = 0;
   while(true){
     unsigned long currentMillis = millis();
@@ -102,11 +107,11 @@ void turnRight(long time, int speed){
   analogWrite(motor1_in2,0);
   analogWrite(motor2_in1,0);
   analogWrite(motor2_in2,speed);
-  travelled.push_back(2);
   }
+  stop();
 } 
 
-void moveBackward(long time, int speed){
+void moveBackward(unsigned long time, int speed){
   unsigned long previousMillis = 0;
   while(true){
     unsigned long currentMillis = millis();
@@ -119,13 +124,7 @@ void moveBackward(long time, int speed){
     analogWrite(motor2_in1,0);
     analogWrite(motor2_in2,speed);
   }
-}
-
-void stop(){
-  analogWrite(motor1_in1,0);
-  analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,0);  
+  stop();
 }
 
 void maze(bool leftMode){
@@ -137,15 +136,10 @@ void maze(bool leftMode){
         moveForward(1000,255);
       } else if (front_distance<10){ // Second rule: if there is road forward
         moveForward(100,255);
-        travelled.push_back(0);
         } else { //Third rule: if there is no road for left and forward
           turnRight(2000,255);
         }  
     }
-  }
-  vector<string>::iterator it; // print the shortest route at the end
-  for(it = travelled.begin();it!=travelled.end();it++){
-    Serial.print(*it);
   }
 }
 
@@ -160,10 +154,10 @@ void setup() {
  
 void loop() {
   delay(1000);
+  front_distance = ultrasonic1.ping_cm();
+  left_distance = ultrasonic2.ping_cm();
   Serial.print("Ping Sensor1: ");
-  Serial.print(ultrasonic1.ping_cm());
-  Serial.println("cm");
+  Serial.println(front_distance);
   Serial.print("Ping Sensor2: ");
-  Serial.print(ultrasonic2.ping_cm());
-  Serial.println("cm");
+  Serial.println(left_distance);
 }
