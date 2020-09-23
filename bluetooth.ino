@@ -1,4 +1,3 @@
-  
 String command;
  
 void setup() {
