@@ -135,7 +135,7 @@ void moveBackward(unsigned long time, int speed){
   stop();
 }
 
-void maze(bool leftMode){
+void startMaze(bool leftMode){
   mazeSolved = false;
   while(!mazeSolved){
     if(leftMode){
