@@ -139,10 +139,10 @@ void maze(bool leftMode){
   mazeSolved = false;
   while(!mazeSolved){
     if(leftMode){
-      if(left_distance<10){ // First rule: if there is road to left
+      if(left_distance>=30){ // First rule: if there is road to left
         turnLeft(2000,25);
         moveForward(1000,25);
-      } else if (front_distance<10){ // Second rule: if there is road forward
+      } else if (front_distance<=8){ // Second rule: if there is road forward
         moveForward(100,25);
         } else { //Third rule: if there is no road for left and forward
           turnRight(2000,25);
