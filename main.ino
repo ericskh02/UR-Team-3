@@ -26,6 +26,7 @@ unsigned long currentMillis = 0;
 vector<int> travelled; // 0 = front, 1 = left, 2 = right, 3 = back
 bool mazeSolved = false;
 
+//Movement of Robot
 void moveForward(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
@@ -62,6 +63,8 @@ void moveForward(long time, int speed){
   while(true){
     currentMillis = millis();  
     if(currentMillis - previousMillis >= time){
+      previousMillis = currentMillis;
+    }
       break;
     }
     analogWrite(motor1_in1,speed);
@@ -76,6 +79,7 @@ void turnLeft(long time,int speed){
   while(true){
     currentMillis = millis();
     if(currentMillis - previousMillis >= time){
+      previousMillis = currentMillis;
       break;
     }
     analogWrite(motor1_in1,0);
@@ -91,6 +95,7 @@ void turnRight(long time, int speed){
   while(true){
     unsigned long currentMillis = millis();
     if(currentMillis - previousMillis >= time){
+      previousMillis = currentMillis;
       break;  
     }  
   analogWrite(motor1_in1,speed);
@@ -105,12 +110,22 @@ void moveBackward(long time, int speed){
   unsigned long previousMillis = 0;
   while(true){
     unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis )
+    if(currentMillis - previousMillis ){
+      previousMillis = currentMillis;
+      break;
+    }
     analogWrite(motor1_in1,0);
     analogWrite(motor1_in2,speed);
     analogWrite(motor2_in1,0);
     analogWrite(motor2_in2,speed);
   }
+}
+
+void stop(){
+  analogWrite(motor1_in1,0);
+  analogWrite(motor1_in2,0);
+  analogWrite(motor2_in1,0);
+  analogWrite(motor2_in2,0);  
 }
 
 void maze(bool leftMode){
