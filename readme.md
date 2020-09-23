@@ -1,29 +1,29 @@
 # Documentation for UR Team 3 Robot Program
 
 ## Functions For Ultrasonic Sensor Reading:
-getFrontDistance(); return int
+getFrontDistance(); return int\
 getLeftDistance();  return int
 
 ## Functions For Robot Movement:
 
 ### 1) Perform forward movement
-moveForward(int speed);
+moveForward(int speed);\
 moveForward(unsigned long time,int speed);
 
 ### 2) Perform left turn movement
-turnLeft(int speed);
+turnLeft(int speed);\
 turnLeft(unsigned long time, int speed);
 
 ### 3) Perform right turn movement
-turnRight(int speed);
+turnRight(int speed);\
 turnRight(unsigned long time, int speed);
 
 ### 4) Perform backward movement
-moveBackward(int speed);
+moveBackward(int speed);\
 moveBackward(unsigned long time, int speed);
 
 ### 5) Stop the robot from moving
-stop();
+stop();\
 stop(unsigned long time);
 
 ## Functions For Maze:
