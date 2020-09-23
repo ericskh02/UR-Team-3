@@ -129,6 +129,7 @@ void stop(){
 }
 
 void maze(bool leftMode){
+  mazeSolved = false;
   while(!mazeSolved){
     if(leftMode){
       if(left_distance<10){ // First rule: if there is road to left
