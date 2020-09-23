@@ -28,6 +28,6 @@ stop(unsigned long time);
 
 ## Functions For Maze:
 ### 1) Starts the maze algorithm
-maze(bool leftMode);
+startMaze(bool leftMode);
 ### 2) Notify the robot that the maze is completed and the maze algorithm can be stopped
 setMazeCompleted();
