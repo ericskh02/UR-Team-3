@@ -8,9 +8,9 @@
 #define ECHO_PIN_2 5
 #define MAX_DISTANCE 200
 
-
 NewPing ultrasonic1(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
 NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
+
 int left_distance = 0;
 int front_distance = 0;
 
@@ -27,6 +27,14 @@ unsigned long currentMillis = 0;
 //Maze
 bool mazeSolved = false;
 
+//Ultrasonic Sensor Reading
+int getFrontDistance(){
+  return front_distance;
+}
+
+int getLeftDistance(){
+  return left_distance;  
+}
 //Movement of Robot
 void stop(){
   analogWrite(motor1_in1,0);
