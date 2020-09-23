@@ -1,5 +1,9 @@
 # Documentation for UR Team 3 Robot Program
 
+## Functions For Ultrasonic Sensor Reading:
+getFrontDistance(); return int
+getLeftDistance();  return int
+
 ## Functions For Robot Movement:
 
 ### 1) Perform forward movement
