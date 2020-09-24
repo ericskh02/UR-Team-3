@@ -1,5 +1,8 @@
 # Documentation for UR Team 3 Robot Program
 
+##Functions For Bluetooth Connection:
+executeCommand(String command); execute a function with command argument
+
 ## Functions For Ultrasonic Sensor Reading:
 getFrontDistance(); return int in cm\
 getLeftDistance();  return int in cm
