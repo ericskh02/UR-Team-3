@@ -26,8 +26,8 @@ moveBackward(int speed);\
 moveBackward(unsigned long time, int speed);
 
 ### 5) Stop the robot from moving
-stop();\
-stop(unsigned long time);
+brake();\
+brake(unsigned long time);
 
 ## Functions For Maze:
 ### 1) Starts the maze algorithm
