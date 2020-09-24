@@ -7,6 +7,10 @@ void setup() {
 void loop() {
     if(Serial.available()){
         command = Serial.readStringUntil('\n');
-          Serial.println(command);
+          if(command.equals("hello")){
+            Serial.println("test");
+          } else {
+            Serial.println(command);
+          }
     }
 }
