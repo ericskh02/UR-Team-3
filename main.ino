@@ -24,7 +24,7 @@ unsigned long previousMillis = 0;
 unsigned long currentMillis = 0;
 
 //Maze
-bool mazeSolved = false;
+bool mazeSolved = true;
 
 //Ultrasonic Sensor Reading
 int getFrontDistance(){
@@ -136,39 +136,31 @@ void moveBackward(unsigned long time, int speed){
 
 void startMaze(bool leftMode){
   mazeSolved = false;
-  while(!mazeSolved){
-    if(leftMode){
-      if(left_distance>=30){ // First rule: if there is road to left
-        turnLeft(2000,25);
-        moveForward(1000,25);
-      } else if (front_distance<=8){ // Second rule: if there is road forward
-        moveForward(100,25);
-        } else { //Third rule: if there is no road for left and forward
-          turnRight(2000,25);
-        }  
-    }
-  }
 }
 
+void setMazeCompleted(){
+  mazeSolved = true;
+}
 //Bluetooth Connection and Command Setup
-enum Commands {
-  moveForward,
-  turnLeft,
-  turnRight,
-  moveBackward,
-  brake,
-  startMaze,
-  setMazeCompleted  
-};
 String command;
+int defined_speed = 50;
 void executeCommand(String command){
-  if(command.equals("hello")){
-    Serial.println("test");
-  } else if (command.equals("
-  
-  else {
-    Serial.println(command);
-  }   
+  Serial.println(command);
+  if(command.equals("brake")){
+    brake();
+  } else if (command.equals("moveForward")){
+    moveForward(defined_speed);   
+  } else if (command.equals("turnLeft")){
+    turnLeft(defined_speed);
+  } else if (command.equals("turnRight")){
+    turnRight(defined_speed);
+  } else if (command.equals("moveBackward")){
+    moveBackward(defined_speed);
+  } else if (command.equals("setMazeCompleted")){
+    setMazeCompleted();
+  } else if (command.equals("startMaze")){
+    startMaze(true);
+  } else Serial.println(command);
 }
 
 void setup() {
@@ -179,18 +171,24 @@ void setup() {
   pinMode(motor2_in1,OUTPUT);
   pinMode(motor2_in2,OUTPUT);
 }
- 
+
 void loop() {
-  delay(1000);
   front_distance = ultrasonic1.ping_cm();
   left_distance = ultrasonic2.ping_cm();
-  Serial.print("Ping Sensor1: ");
-  Serial.println(front_distance);
-  Serial.print("Ping Sensor2: ");
-  Serial.println(left_distance);
 
   if(Serial.available()){
     command = Serial.readStringUntil('\n');
     executeCommand(command);
+  }
+
+  while(!mazeSolved){
+      if(left_distance>=30){ // First rule: if there is road to left
+        turnLeft(2000,25);
+        moveForward(1000,25);
+      } else if (front_distance<=8){ // Second rule: if there is road forward
+        moveForward(100,25);
+        } else { //Third rule: if there is no road for left and forward
+          turnRight(2000,25);
+        }  
   }
 }
