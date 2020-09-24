@@ -1,5 +1,4 @@
 #include <NewPing.h>
-#include <Vector.h>
 
 //Ultrasonic Sensor Setup
 #define TRIGGER_PIN_1 2
@@ -13,6 +12,9 @@ NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
 
 int left_distance = 0;
 int front_distance = 0;
+
+//Bluetooth Connection Setup
+String command;
 
 //Motor Setup
 #define motor1_in1 6
@@ -168,4 +170,13 @@ void loop() {
   Serial.println(front_distance);
   Serial.print("Ping Sensor2: ");
   Serial.println(left_distance);
+
+  if(Serial.available()){
+    command = Serial.readStringUntil('\n');
+    if(command.equals("hello")){
+      Serial.println("test");
+    } else {
+      Serial.println(command);
+    }
+  }
 }
