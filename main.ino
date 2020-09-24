@@ -13,9 +13,6 @@ NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
 int left_distance = 0;
 int front_distance = 0;
 
-//Bluetooth Connection Setup
-String command;
-
 //Motor Setup
 #define motor1_in1 6
 #define motor1_in2 9
@@ -38,7 +35,7 @@ int getLeftDistance(){
   return left_distance;  
 }
 //Movement of Robot
-void stop(){
+void brake(){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,0);
   analogWrite(motor2_in1,0);
@@ -86,7 +83,7 @@ void moveForward(unsigned long time, int speed){
     analogWrite(motor2_in1,speed);
     analogWrite(motor2_in2,0);
   }
-  stop();
+  brake();
 }
 
 void turnLeft(unsigned long time,int speed){
@@ -102,7 +99,7 @@ void turnLeft(unsigned long time,int speed){
     analogWrite(motor2_in1,speed);
     analogWrite(motor2_in2,0);
   }
-  stop();
+  brake();
 }
 
 void turnRight(unsigned long time, int speed){
@@ -118,7 +115,7 @@ void turnRight(unsigned long time, int speed){
   analogWrite(motor2_in1,0);
   analogWrite(motor2_in2,speed);
   }
-  stop();
+  brake();
 } 
 
 void moveBackward(unsigned long time, int speed){
@@ -134,7 +131,7 @@ void moveBackward(unsigned long time, int speed){
     analogWrite(motor2_in1,0);
     analogWrite(motor2_in2,speed);
   }
-  stop();
+  brake();
 }
 
 void startMaze(bool leftMode){
@@ -151,6 +148,27 @@ void startMaze(bool leftMode){
         }  
     }
   }
+}
+
+//Bluetooth Connection and Command Setup
+enum Commands {
+  moveForward,
+  turnLeft,
+  turnRight,
+  moveBackward,
+  brake,
+  startMaze,
+  setMazeCompleted  
+};
+String command;
+void executeCommand(String command){
+  if(command.equals("hello")){
+    Serial.println("test");
+  } else if (command.equals("
+  
+  else {
+    Serial.println(command);
+  }   
 }
 
 void setup() {
@@ -173,10 +191,6 @@ void loop() {
 
   if(Serial.available()){
     command = Serial.readStringUntil('\n');
-    if(command.equals("hello")){
-      Serial.println("test");
-    } else {
-      Serial.println(command);
-    }
+    executeCommand(command);
   }
 }
