@@ -1,8 +1,5 @@
 #include <NewPing.h>
 
-//Speed for the motor
-#define defined_speed 35
-
 //Ultrasonic Sensor Setup
 #define TRIGGER_PIN_1 2
 #define ECHO_PIN_1 3
@@ -21,6 +18,8 @@ int front_distance = 0;
 #define motor1_in2 9
 #define motor2_in1 10
 #define motor2_in2 11
+
+int defined_speed = 35;
 
 //Time delay setup
 unsigned long previousMillis = 0;
@@ -161,32 +160,33 @@ byte command;
 void executeCommand(int command){
   Serial.println(command);
   switch(command){
-    case 5:
+    case 300:
       brake();
       break;
-    case 1:
+    case 301:
       moveForward(defined_speed);
       break;
-    case 2:
+    case 302:
       turnLeft(defined_speed);
       break;
-    case 3:
+    case 303:
       turnRight(defined_speed);
       break;
-    case 4:
+    case 304:
       moveBackward(defined_speed);
       break;
-    case 10:
+    case 400:
       startMaze(true);
       break;
-    case 11:
+    case 401:
       setMazeCompleted();
       break;
-    case 123:
+    case 260:
       Serial.println("test hi");
       break;
     default:
       Serial.println(command);
+      defined_speed = command;
       break;
   }
 }
