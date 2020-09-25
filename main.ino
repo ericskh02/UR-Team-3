@@ -1,5 +1,8 @@
 #include <NewPing.h>
 
+//Speed for the motor
+#define defined_speed 35
+
 //Ultrasonic Sensor Setup
 #define TRIGGER_PIN_1 2
 #define ECHO_PIN_1 3
@@ -155,7 +158,6 @@ void setMazeCompleted(){
 }
 //Bluetooth Connection and Command Setup
 byte command;
-int defined_speed = 50;
 void executeCommand(int command){
   Serial.println(command);
   switch(command){
@@ -209,12 +211,14 @@ void loop() {
 
   if(!mazeSolved){ // Zero rule: if the maze is not completed
     if(left_distance>=30){ // First rule: if there is road to left
-      turnLeft(2000,25);
-      moveForward(1000,25);
+      moveForward(1000,defined_speed);
+      turnLeft(2000,defined_speed);
+      moveForward(1000,defined_speed);
     } else if (front_distance<=8){ // Second rule: if there is road forward
-      moveForward(100,25);
+      moveForward(100,defined_speed);
       } else { //Third rule: if there is no road for left and forward
-        turnRight(2000,25);
+        turnRight(2000,defined_speed);
     }  
   }
 }
+  
