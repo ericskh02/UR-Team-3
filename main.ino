@@ -39,10 +39,10 @@ int getLeftDistance(){
 }
 //Movement of Robot
 void brake(){
-  analogWrite(motor1_in1,0);
-  analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,0);  
+  analogWrite(motor1_in1,255);
+  analogWrite(motor1_in2,255);
+  analogWrite(motor2_in1,255);
+  analogWrite(motor2_in2,255);  
 }
 
 void moveForward(int speed){
