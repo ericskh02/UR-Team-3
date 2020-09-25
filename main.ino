@@ -142,25 +142,39 @@ void setMazeCompleted(){
   mazeSolved = true;
 }
 //Bluetooth Connection and Command Setup
-String command;
+byte command;
 int defined_speed = 50;
-void executeCommand(String command){
+void executeCommand(int command){
   Serial.println(command);
-  if(command.equals("brake")){
-    brake();
-  } else if (command.equals("moveForward")){
-    moveForward(defined_speed);   
-  } else if (command.equals("turnLeft")){
-    turnLeft(defined_speed);
-  } else if (command.equals("turnRight")){
-    turnRight(defined_speed);
-  } else if (command.equals("moveBackward")){
-    moveBackward(defined_speed);
-  } else if (command.equals("setMazeCompleted")){
-    setMazeCompleted();
-  } else if (command.equals("startMaze")){
-    startMaze(true);
-  } else Serial.println(command);
+  switch(command){
+    case 0:
+      brake();
+      break;
+    case 1:
+      moveForward(defined_speed);
+      break;
+    case 2:
+      turnLeft(defined_speed);
+      break;
+    case 3:
+      turnRight(defined_speed);
+      break;
+    case 4:
+      moveBackward(defined_speed);
+      break;
+    case 10:
+      startMaze(true);
+      break;
+    case 11:
+      setMazeCompleted();
+      break;
+    case 123:
+      Serial.println("test hi");
+      break;
+    default:
+      Serial.println(command);
+      break;
+  }
 }
 
 void setup() {
@@ -177,18 +191,18 @@ void loop() {
   left_distance = ultrasonic2.ping_cm();
 
   if(Serial.available()){
-    command = Serial.readStringUntil('\n');
+    command = Serial.read();
     executeCommand(command);
   }
 
-  while(!mazeSolved){
-      if(left_distance>=30){ // First rule: if there is road to left
-        turnLeft(2000,25);
-        moveForward(1000,25);
-      } else if (front_distance<=8){ // Second rule: if there is road forward
-        moveForward(100,25);
-        } else { //Third rule: if there is no road for left and forward
-          turnRight(2000,25);
-        }  
+  if(!mazeSolved){ // Zero rule: if the maze is not completed
+    if(left_distance>=30){ // First rule: if there is road to left
+      turnLeft(2000,25);
+      moveForward(1000,25);
+    } else if (front_distance<=8){ // Second rule: if there is road forward
+      moveForward(100,25);
+      } else { //Third rule: if there is no road for left and forward
+        turnRight(2000,25);
+    }  
   }
 }
