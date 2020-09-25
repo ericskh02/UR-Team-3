@@ -89,6 +89,9 @@ void moveForward(unsigned long time, int speed){
 void turnLeft(unsigned long time,int speed){
   previousMillis = 0;
   while(true){
+    if(Serial.available()){
+      break;
+    }
     currentMillis = millis();
     if(currentMillis - previousMillis >= time){
       previousMillis = currentMillis;
@@ -147,7 +150,7 @@ int defined_speed = 50;
 void executeCommand(int command){
   Serial.println(command);
   switch(command){
-    case 0:
+    case 5:
       brake();
       break;
     case 1:
