@@ -184,8 +184,8 @@ void executeCommand(int command){
     case 260:
       Serial.println("test hi");
       break;
-    default:
-      Serial.println(command);
+    default: // when speed is sent
+      Serial.println(command); 
       defined_speed = command;
       break;
   }
@@ -221,4 +221,3 @@ void loop() {
     }  
   }
 }
-  
