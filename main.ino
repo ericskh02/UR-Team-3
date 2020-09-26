@@ -210,11 +210,11 @@ void loop() {
   }
 
   if(!mazeSolved){ // Zero rule: if the maze is not completed
-    if(left_distance>=30){ // First rule: if there is road to left
+    if(left_distance>=10){ // First rule: if there is road to left
       moveForward(1000,defined_speed);
       turnLeft(2000,defined_speed);
       moveForward(1000,defined_speed);
-    } else if (front_distance<=8){ // Second rule: if there is road forward
+    } else if (front_distance<=10){ // Second rule: if there is road forward
       moveForward(100,defined_speed);
       } else { //Third rule: if there is no road for left and forward
         turnRight(2000,defined_speed);
