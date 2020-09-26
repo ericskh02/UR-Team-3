@@ -1,4 +1,3 @@
-  
 #include <NewPing.h>
 
 //Ultrasonic Sensor Setup
@@ -13,6 +12,8 @@ NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
 
 int left_distance = 0;
 int front_distance = 0;
+int left_defined_distance = 25;
+int front_defined_distance = 10;
 
 //Motor Setup
 #define motor1_in1 6
@@ -215,11 +216,11 @@ void loop() {
   }
 
   if(!mazeSolved){ // Zero rule: if the maze is not completed
-    if(left_distance>=10){ // First rule: if there is road to left
+    if(left_distance>=left_defined_distance){ // First rule: if there is road to left
       moveForward(1000,forward_defined_speed);
       turnLeft(2000,left_defined_speed);
       moveForward(1000,forward_defined_speed);
-    } else if (front_distance<=10){ // Second rule: if there is road forward
+    } else if (front_distance<=front_defined_distance){ // Second rule: if there is road forward
       moveForward(100,forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
         turnRight(2000,right_defined_speed);
