@@ -50,6 +50,7 @@ void brake(){
   analogWrite(motor2_in2,255);  
 }
 
+// the connection of the motors is not well set uo and may need further re-soldering
 void moveForward(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
