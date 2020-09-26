@@ -1,3 +1,4 @@
+  
 #include <NewPing.h>
 
 //Ultrasonic Sensor Setup
@@ -19,7 +20,11 @@ int front_distance = 0;
 #define motor2_in1 10
 #define motor2_in2 11
 
-int defined_speed = 35;
+int defined_speed = 0; // For bluetooth control
+int forward_defined_speed = 35;
+int left_defined_speed = 35;
+int right_defined_speed = 35;
+int backward_defined_speed = 35;
 
 //Time delay setup
 unsigned long previousMillis = 0;
@@ -211,13 +216,13 @@ void loop() {
 
   if(!mazeSolved){ // Zero rule: if the maze is not completed
     if(left_distance>=10){ // First rule: if there is road to left
-      moveForward(1000,defined_speed);
-      turnLeft(2000,defined_speed);
-      moveForward(1000,defined_speed);
+      moveForward(1000,forward_defined_speed);
+      turnLeft(2000,left_defined_speed);
+      moveForward(1000,forward_defined_speed);
     } else if (front_distance<=10){ // Second rule: if there is road forward
-      moveForward(100,defined_speed);
+      moveForward(100,forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
-        turnRight(2000,defined_speed);
+        turnRight(2000,right_defined_speed);
     }  
   }
 }
