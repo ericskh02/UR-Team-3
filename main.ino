@@ -18,8 +18,8 @@ int front_defined_distance = 10;
 //Motor Setup
 #define motor1_in1 6
 #define motor1_in2 9
-#define motor2_in1 10
-#define motor2_in2 11
+#define motor2_in1 11
+#define motor2_in2 10
 
 int defined_speed = 0; // For bluetooth control
 int forward_defined_speed = 35;
