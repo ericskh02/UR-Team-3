@@ -16,12 +16,12 @@ int left_defined_distance = 25;
 int front_defined_distance = 10;
 
 //Motor Setup
-#define motor1_in1 6
-#define motor1_in2 9
-#define motor2_in1 11
-#define motor2_in2 10
+#define motor1_in1 11
+#define motor1_in2 10
+#define motor2_in1 6
+#define motor2_in2 9  
 
-int defined_speed = 0; // For bluetooth control
+int defined_speed = 100; // For bluetooth control
 int forward_defined_speed = 35;
 int left_defined_speed = 35;
 int right_defined_speed = 35;
@@ -167,32 +167,33 @@ byte command;
 void executeCommand(int command){
   Serial.println(command);
   switch(command){
-    case 300:
+    case 0:
+      break;
+    case 255:
       brake();
       break;
-    case 301:
+    case 251:
       moveForward(defined_speed);
       break;
-    case 302:
+    case 252:
       turnLeft(defined_speed);
       break;
-    case 303:
+    case 253:
       turnRight(defined_speed);
       break;
-    case 304:
+    case 254:
       moveBackward(defined_speed);
       break;
-    case 400:
+    case 246:
       startMaze(true);
       break;
-    case 401:
+    case 247:
       setMazeCompleted();
       break;
-    case 260:
+    case 248:
       Serial.println("test hi");
       break;
     default: // when speed is sent
-      Serial.println(command); 
       defined_speed = command;
       break;
   }
@@ -213,6 +214,7 @@ void loop() {
 
   if(Serial.available()){
     command = Serial.read();
+    
     executeCommand(command);
   }
 
