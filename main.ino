@@ -94,9 +94,6 @@ void moveBackward(int speed){
 
 void moveForward(unsigned long time, int speed){
   while(true){
-    if(Serial.available()>0){
-      break;
-    }
     moveForward(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
@@ -108,9 +105,6 @@ void moveForward(unsigned long time, int speed){
 
 void turnLeft(unsigned long time,int speed){
   while(true){
-    if(Serial.available()>0){
-      break;
-    }
     turnLeft(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
@@ -122,9 +116,6 @@ void turnLeft(unsigned long time,int speed){
 
 void turnRight(unsigned long time, int speed){
   while(true){
-    if(Serial.available()>0){
-      break;
-    }
     turnRight(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
@@ -136,9 +127,6 @@ void turnRight(unsigned long time, int speed){
 
 void moveBackward(unsigned long time, int speed){
   while(true){
-    if(Serial.available()>0){
-      break;
-    }
     moveBackward(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
