@@ -1,216 +1,39 @@
-#include <NewPing.h>
+#define TRIG_2 2
+#define ECHO_2 3
 
-//Ultrasonic Sensor Setup
-#define TRIGGER_PIN_1 2
-#define ECHO_PIN_1 3
-#define TRIGGER_PIN_2 4
-#define ECHO_PIN_2 5
-#define MAX_DISTANCE 200
-
-NewPing ultrasonic1(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
-NewPing ultrasonic2(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
-
-int left_distance = 0;
-int front_distance = 0;
-int left_defined_distance = 25;
-int front_defined_distance = 10;
-
-//Motor Setup
-#define motor1_in1 11
-#define motor1_in2 10
-#define motor2_in1 6
-#define motor2_in2 9  
-
-int defined_speed = 100; // For bluetooth control
-int turn_defined_speed = 50;
-int forward_defined_speed = 75;
-int left_defined_speed = 35;
-int right_defined_speed = 35;
-int backward_defined_speed = 50;
-
-//Time delay setup
-unsigned long previousMillis = 0;
-
-//Maze
-bool mazeSolved = true;
-
-//Ultrasonic Sensor Reading
-int getFrontDistance(){
-  return front_distance;
+void setup(){
+  pinMode (12, OUTPUT);
+  pinMode (A1, INPUT);
+  pinMode(TRIG_2,OUTPUT);
+  pinMode(ECHO_2,INPUT);
+//  pinMode(TRIG_3,OUTPUT);
+//  pinMode(ECHO_3,INPUT);
+  Serial.begin (9600);
 }
 
-int getLeftDistance(){
-  return left_distance;  
-}
-//Movement of Robot
-void brake(){
-  analogWrite(motor1_in1,255);
-  analogWrite(motor1_in2,255);
-  analogWrite(motor2_in1,255);
-  analogWrite(motor2_in2,255);  
-}
-
-// the connection of the motors is not well set uo and may need further re-soldering
-void moveForward(int speed){
-  analogWrite(motor1_in1,speed);
-  analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,speed);
-  analogWrite(motor2_in2,0);
-}
-
-void turnLeft(int speed){
-  analogWrite(motor1_in1,0);
-  analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in1,speed);
-  analogWrite(motor2_in2,0);
-}
-
-void turnRight(int speed){
-  analogWrite(motor1_in1,speed);
-  analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,speed);
-} 
-
-void moveBackward(int speed){
-  analogWrite(motor1_in1,0);
-  analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,speed);  
-}
-
-void moveForward(unsigned long time, int speed){
-  while(true){
-    if(Serial.available()>0){
-      break;
-    }
-    moveBackward(speed);
-    if(millis() - previousMillis > time){
-      previousMillis += time;
-      break;
-    }
-  }
-  brake();
-}
-
-void turnLeft(unsigned long time,int speed){
-  while(true){
-    if(Serial.available()>0){
-      break;
-    }
-    turnLeft(speed);
-    if(millis() - previousMillis > time){
-      previousMillis += time;
-      break;
-    }
-  }
-  brake();
-}
-
-void turnRight(unsigned long time, int speed){
-  while(true){
-    if(Serial.available()>0){
-      break;
-    }
-    turnRight(speed);
-    if(millis() - previousMillis > time){
-      previousMillis += time;
-      break;  
-    }  
-  }
-  brake();
-} 
-
-void moveBackward(unsigned long time, int speed){
-  while(true){
-    if(Serial.available()>0){
-      break;
-    }
-    moveBackward(speed);
-    if(millis() - previousMillis > time){
-      previousMillis += time;
-      break;
-    }
-  }
-  brake();
-}
-
-void startMaze(){
-  mazeSolved = false;
-}
-
-void setMazeCompleted(){
-  mazeSolved = true;
-}
-//Bluetooth Connection and Command Setup
-byte command;
-void executeCommand(int command){
-  Serial.println(command);
-  switch(command){
-    case 0:
-      break;
-    case 255:
-      brake();
-      break;
-    case 251:
-      moveForward(defined_speed);
-      break;
-    case 252:
-      turnLeft(turn_defined_speed);
-      break;
-    case 253:
-      turnRight(turn_defined_speed);
-      break;
-    case 254:
-      moveBackward(defined_speed);
-      break;
-    case 246:
-      startMaze();
-      break;
-    case 247:
-      setMazeCompleted();
-      break;
-    case 248:
-      Serial.println("test hi");
-      break;
-    case 245:
-      moveForward(1000,defined_speed);
-      break;
-    default: // when speed is sent
-      defined_speed = command;
-      break;
-  }
-}
-
-void setup() {
-  Serial.begin(9600);
-  // pinMode of ultrasonic sensors are defined in NewPing library itself
-  pinMode(motor1_in1,OUTPUT);
-  pinMode(motor1_in2,OUTPUT);
-  pinMode(motor2_in1,OUTPUT);
-  pinMode(motor2_in2,OUTPUT);
-}
-
-void loop() {
-  front_distance = ultrasonic1.ping_cm();
-  left_distance = ultrasonic2.ping_cm();
-  Serial.write(left_distance);
-  delay(100);
-  if(Serial.available()){
-    command = Serial.read();
-    
-    executeCommand(command);
-  }
-
-  if(!mazeSolved){ // Zero rule: if the maze is not completed
-    if(left_distance>=left_defined_distance){ // First rule: if there is road to left
-      moveForward(500,forward_defined_speed);
-      turnLeft(2000,left_defined_speed);
-      moveForward(1000,forward_defined_speed);
-    } else if (front_distance<=front_defined_distance){ // Second rule: if there is road forward
-      moveForward(forward_defined_speed);
-      } else { //Third rule: if there is no road for left and forward
-        turnRight(2000,right_defined_speed);
-    }  
-  }
+void loop(){
+  digitalWrite(12, LOW);
+  digitalWrite(TRIG_2, LOW);
+  //digitalWrite(TRIG_3, LOW);
+  delayMicroseconds(2);
+  digitalWrite(12, HIGH);
+  digitalWrite(TRIG_2, HIGH);
+  //digitalWrite(TRIG_3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(12, LOW);
+  digitalWrite(TRIG_2, LOW);
+  //digitalWrite(TRIG_3, LOW);
+  delayMicroseconds(2);
+  double duration_1 = pulseIn(A1, HIGH);
+  double distance_1 = (duration_1)*0.034/2;
+  Serial.print("sensor 1: ");
+  Serial.println(distance_1);
+  double duration_2 = pulseIn(ECHO_2, HIGH);
+  //int duration_3 = pulseIn(ECHO_3, HIGH);
+  double distance_2 = (duration_2)*0.034/2;
+  //int distance_3 = (duration_3)*0.034/2;
+  Serial.print("sensor 2: ");
+  Serial.println(distance_2);
+  //Serial.print("sensor 3: ");
+  //Serial.println(distance_3);
 }
