@@ -29,17 +29,17 @@ bool right_has_wall = true;
 bool left_tooclose = false;
 bool right_tooclose = true;
 //Motor Setup
-#define motor1_in1 11
-#define motor1_in2 10
-#define motor2_in1 6
-#define motor2_in2 9  
+#define motor1_in1 10
+#define motor1_in2 11
+#define motor2_in1 9
+#define motor2_in2 6  
 
 int defined_speed = 100; // For bluetooth control
 int turn_defined_speed = 50;
-int forward_defined_speed = 75;
+int forward_defined_speed = 100;
 int left_defined_speed = 35;
-int right_defined_speed = 35;
-int backward_defined_speed = 50;
+int right_defined_speed = 50;
+int backward_defined_speed = 100;
 
 //Time delay setup
 unsigned long previousMillis = 0;
@@ -239,13 +239,13 @@ void loop() {
   } else left_tooclose = false;
   if(!mazeSolved){ // Zero rule: if the maze is not completed
     if(!left_has_wall){ // First rule: if there is road to left
-      moveForward(500,forward_defined_speed);
-      turnLeft(2000,left_defined_speed);
-      moveForward(1000,forward_defined_speed);
+      moveForward(100,forward_defined_speed);
+      turnLeft(100,left_defined_speed);
+      moveForward(100,forward_defined_speed);
     } else if (!front_has_wall){ // Second rule: if there is road forward
       moveForward(forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
-      turnRight(2000,right_defined_speed);
+      turnRight(100,right_defined_speed);
     }  
   }
 }
