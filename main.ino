@@ -29,8 +29,8 @@ bool right_has_wall = true;
 bool left_tooclose = false;
 bool right_tooclose = true;
 //Motor Setup
-#define motor2_in1 6
-#define motor2_in2 9  
+#define motor2_in2 6
+#define motor2_in1 9  
 #define motor1_in1 10
 #define motor1_in2 11
 
@@ -48,49 +48,41 @@ unsigned long previousMillis = 0;
 //Maze
 bool mazeSolved = true;
 
-//Ultrasonic Sensor Reading
-int getFrontDistance(){
-  return front_distance;
-}
-
-int getLeftDistance(){
-  return left_distance;  
-}
 //Movement of Robot
 void brake(){
   analogWrite(motor1_in1,255);
   analogWrite(motor1_in2,255);
-  analogWrite(motor2_in1,255);
-  analogWrite(motor2_in2,255);  
+  analogWrite(motor2_in2,255);
+  analogWrite(motor2_in1,255);  
 }
 
 // the connection of the motors is not well set uo and may need further re-soldering
 void moveForward(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,speed);
-  analogWrite(motor2_in2,0);
+  analogWrite(motor2_in2,speed);
+  analogWrite(motor2_in1,0);
 }
 
 void turnLeft(int speed){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in1,speed);
-  analogWrite(motor2_in2,0);
+  analogWrite(motor2_in2,speed);
+  analogWrite(motor2_in1,0);
 }
 
 void turnRight(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,speed);
+  analogWrite(motor2_in2,0);
+  analogWrite(motor2_in1,speed);
 } 
 
 void moveBackward(int speed){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,speed);  
+  analogWrite(motor2_in2,0);
+  analogWrite(motor2_in1,speed);  
 }
 
 void moveForward(unsigned long time, int speed){
@@ -189,8 +181,8 @@ void setup() {
   // pinMode of ultrasonic sensors are defined in NewPing library itself
   pinMode(motor1_in1,OUTPUT);
   pinMode(motor1_in2,OUTPUT);
-  pinMode(motor2_in1,OUTPUT);
   pinMode(motor2_in2,OUTPUT);
+  pinMode(motor2_in1,OUTPUT);
   pinMode(TRIGGER_PIN_3, OUTPUT);
   pinMode(ECHO_PIN_3, INPUT);
 }
