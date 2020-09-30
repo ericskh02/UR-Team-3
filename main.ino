@@ -29,10 +29,11 @@ bool right_has_wall = true;
 bool left_tooclose = false;
 bool right_tooclose = true;
 //Motor Setup
-#define motor1_in1 10
-#define motor1_in2 11
 #define motor2_in1 6
 #define motor2_in2 9  
+#define motor1_in1 10
+#define motor1_in2 11
+
 
 int defined_speed = 100; // For bluetooth control
 int turn_defined_speed = 50;
