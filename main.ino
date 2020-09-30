@@ -97,13 +97,13 @@ void moveForward(unsigned long time, int speed){
     if(Serial.available()>0){
       break;
     }
-    moveBackward(speed);
+    moveForward(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
+      brake();
       break;
     }
   }
-  brake();
 }
 
 void turnLeft(unsigned long time,int speed){
