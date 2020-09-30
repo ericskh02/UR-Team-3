@@ -30,7 +30,6 @@ int backward_defined_speed = 50;
 
 //Time delay setup
 unsigned long previousMillis = 0;
-unsigned long currentMillis = 0;
 
 //Maze
 bool mazeSolved = true;
@@ -81,15 +80,13 @@ void moveBackward(int speed){
 }
 
 void moveForward(unsigned long time, int speed){
-  previousMillis = 0;
   while(true){
     if(Serial.available()>0){
       break;
     }
     moveBackward(speed);
-    currentMillis = millis();  
-    if(currentMillis - previousMillis > time){
-      previousMillis = currentMillis;
+    if(millis() - previousMillis > time){
+      previousMillis += time;
       break;
     }
   }
@@ -97,15 +94,13 @@ void moveForward(unsigned long time, int speed){
 }
 
 void turnLeft(unsigned long time,int speed){
-  previousMillis = 0;
   while(true){
     if(Serial.available()>0){
       break;
     }
     turnLeft(speed);
-    currentMillis = millis();
-    if(currentMillis - previousMillis > time){
-      previousMillis = currentMillis;
+    if(millis() - previousMillis > time){
+      previousMillis += time;
       break;
     }
   }
@@ -113,15 +108,13 @@ void turnLeft(unsigned long time,int speed){
 }
 
 void turnRight(unsigned long time, int speed){
-  previousMillis = 0;
   while(true){
     if(Serial.available()>0){
       break;
     }
     turnRight(speed);
-    unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis > time){
-      previousMillis = currentMillis;
+    if(millis() - previousMillis > time){
+      previousMillis += time;
       break;  
     }  
   }
@@ -129,15 +122,13 @@ void turnRight(unsigned long time, int speed){
 } 
 
 void moveBackward(unsigned long time, int speed){
-  unsigned long previousMillis = 0;
   while(true){
     if(Serial.available()>0){
       break;
     }
     moveBackward(speed);
-    unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis > time){
-      previousMillis = currentMillis;
+    if(millis() - previousMillis > time){
+      previousMillis += time;
       break;
     }
   }
@@ -201,7 +192,6 @@ void setup() {
 }
 
 void loop() {
-  currentMillis = millis();
   front_distance = ultrasonic1.ping_cm();
   left_distance = ultrasonic2.ping_cm();
   Serial.write(left_distance);
