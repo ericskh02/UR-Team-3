@@ -22,10 +22,11 @@ int front_defined_distance = 10;
 #define motor2_in2 9  
 
 int defined_speed = 100; // For bluetooth control
-int forward_defined_speed = 35;
+int turn_defined_speed = 50;
+int forward_defined_speed = 75;
 int left_defined_speed = 35;
 int right_defined_speed = 35;
-int backward_defined_speed = 35;
+int backward_defined_speed = 50;
 
 //Time delay setup
 unsigned long previousMillis = 0;
@@ -176,10 +177,10 @@ void executeCommand(int command){
       moveForward(defined_speed);
       break;
     case 252:
-      turnLeft(defined_speed);
+      turnLeft(turn_defined_speed);
       break;
     case 253:
-      turnRight(defined_speed);
+      turnRight(turn_defined_speed);
       break;
     case 254:
       moveBackward(defined_speed);
@@ -211,7 +212,8 @@ void setup() {
 void loop() {
   front_distance = ultrasonic1.ping_cm();
   left_distance = ultrasonic2.ping_cm();
-
+  Serial.write(left_distance);
+  delay(100);
   if(Serial.available()){
     command = Serial.read();
     
@@ -224,7 +226,7 @@ void loop() {
       turnLeft(2000,left_defined_speed);
       moveForward(1000,forward_defined_speed);
     } else if (front_distance<=front_defined_distance){ // Second rule: if there is road forward
-      moveForward(100,forward_defined_speed);
+      moveForward(forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
         turnRight(2000,right_defined_speed);
     }  
