@@ -86,15 +86,12 @@ void moveForward(unsigned long time, int speed){
     if(Serial.available()>0){
       break;
     }
+    moveBackward(speed);
     currentMillis = millis();  
-    if(currentMillis - previousMillis >= time){
+    if(currentMillis - previousMillis > time){
       previousMillis = currentMillis;
       break;
     }
-    analogWrite(motor1_in1,speed);
-    analogWrite(motor1_in2,0);
-    analogWrite(motor2_in1,speed);
-    analogWrite(motor2_in2,0);
   }
   brake();
 }
@@ -105,15 +102,12 @@ void turnLeft(unsigned long time,int speed){
     if(Serial.available()>0){
       break;
     }
+    turnLeft(speed);
     currentMillis = millis();
-    if(currentMillis - previousMillis >= time){
+    if(currentMillis - previousMillis > time){
       previousMillis = currentMillis;
       break;
     }
-    analogWrite(motor1_in1,0);
-    analogWrite(motor1_in2,speed);
-    analogWrite(motor2_in1,speed);
-    analogWrite(motor2_in2,0);
   }
   brake();
 }
@@ -124,15 +118,12 @@ void turnRight(unsigned long time, int speed){
     if(Serial.available()>0){
       break;
     }
+    turnRight(speed);
     unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis >= time){
+    if(currentMillis - previousMillis > time){
       previousMillis = currentMillis;
       break;  
     }  
-  analogWrite(motor1_in1,speed);
-  analogWrite(motor1_in2,0);
-  analogWrite(motor2_in1,0);
-  analogWrite(motor2_in2,speed);
   }
   brake();
 } 
@@ -143,20 +134,17 @@ void moveBackward(unsigned long time, int speed){
     if(Serial.available()>0){
       break;
     }
+    moveBackward(speed);
     unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis ){
+    if(currentMillis - previousMillis > time){
       previousMillis = currentMillis;
       break;
     }
-    analogWrite(motor1_in1,0);
-    analogWrite(motor1_in2,speed);
-    analogWrite(motor2_in1,0);
-    analogWrite(motor2_in2,speed);
   }
   brake();
 }
 
-void startMaze(bool leftMode){
+void startMaze(){
   mazeSolved = false;
 }
 
@@ -186,13 +174,16 @@ void executeCommand(int command){
       moveBackward(defined_speed);
       break;
     case 246:
-      startMaze(true);
+      startMaze();
       break;
     case 247:
       setMazeCompleted();
       break;
     case 248:
       Serial.println("test hi");
+      break;
+    case 245:
+      moveForward(1000,defined_speed);
       break;
     default: // when speed is sent
       defined_speed = command;
@@ -210,6 +201,7 @@ void setup() {
 }
 
 void loop() {
+  currentMillis = millis();
   front_distance = ultrasonic1.ping_cm();
   left_distance = ultrasonic2.ping_cm();
   Serial.write(left_distance);
