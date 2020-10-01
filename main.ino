@@ -12,13 +12,13 @@ bool leftMode = true;
 int defined_speed = 100; // For bluetooth control
 int turn_defined_speed = 50;
 int forward_defined_speed = 75;
-int left_defined_speed = 50;
-int right_defined_speed = 50;
+int left_defined_speed = 100;
+int right_defined_speed = 100;
 int backward_defined_speed = 50;
 
 int forward_defined_time = 250;
-int left_defined_time = 250;
-int right_defined_time = 250;
+int left_defined_time = 175;
+int right_defined_time = 175;
 int backward_defined_time = 250;
 
 //Ultrasonic Sensor Setup
@@ -31,16 +31,16 @@ int backward_defined_time = 250;
 #define MAX_DISTANCE 200
 
 NewPing front_ultrasonic(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
-NewPing left_ultrasonic(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
+NewPing right_ultrasonic(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
 
 double duration_1;
 int left_distance = 0;
 int front_distance = 0;
 int right_distance = 0;
 int front_defined_distance = 25;
-int left_defined_distance = 25;
-int right_defined_distance = 25;
-int tooclose_defined_distance = 10;
+int left_defined_distance = 40;
+int right_defined_distance = 40;
+int tooclose_defined_distance = 7;
 
 bool front_has_wall = false;
 bool left_has_wall = true;
@@ -192,9 +192,9 @@ void check_distance(){
   digitalWrite(TRIGGER_PIN_3, LOW);
   delayMicroseconds(2);
   duration_1 = pulseIn(A1, HIGH);
-  right_distance = (duration_1)*0.034/2;
+  left_distance = (duration_1)*0.034/2;
   front_distance = front_ultrasonic.ping_cm();
-  left_distance = left_ultrasonic.ping_cm();
+  right_distance = right_ultrasonic.ping_cm();
   Serial.print("Left: ");
   Serial.println(left_distance);
   Serial.print("Front: ");
@@ -228,22 +228,28 @@ void check_wall(){
 }
 
 void deviate_check(){
+  check_distance();
+  check_wall();
   if(left_tooclose){
+    moveBackward(backward_defined_speed);
+    delay(50);
     turnRight(right_defined_speed);
-    delay(5);
-    turnLeft(left_defined_speed);
-    delay(5);
+    delay(25);
     moveForward(forward_defined_speed);
+    delay(200);
   }
   if(right_tooclose){
+    moveBackward(backward_defined_speed);
+    delay(50);
     turnLeft(left_defined_speed);
-    delay(5);
-    turnRight(right_defined_speed);
-    delay(5);
+    delay(25);
     moveForward(forward_defined_speed);
+    delay(200);
   }
 }
 void maze(){
+  check_distance();
+  check_wall();
   if(leftMode){
     if(!front_has_wall){ // First rule: if there is road forward
       moveForward(forward_defined_speed);
@@ -290,8 +296,6 @@ void loop() {
   }
 
   if(!mazeSolved){ // Zero rule: if the maze is not completed
-    check_distance();
-    check_wall();
     maze();
   }
 }
