@@ -3,10 +3,10 @@
 bool leftMode = true;
 
 //Motor Setup
-#define left_in1 9
-#define left_in2 6
-#define right_in1 11
-#define right_in2 10
+#define left_in1 10
+#define left_in2 11
+#define right_in1 6
+#define right_in2 9
 
 
 int defined_speed = 100; // For bluetooth control
@@ -37,9 +37,9 @@ double duration_1;
 int left_distance = 0;
 int front_distance = 0;
 int right_distance = 0;
-int front_defined_distance = 20;
-int left_defined_distance = 20;
-int right_defined_distance = 20;
+int front_defined_distance = 25;
+int left_defined_distance = 25;
+int right_defined_distance = 25;
 int tooclose_defined_distance = 10;
 
 bool front_has_wall = false;
@@ -228,12 +228,20 @@ void check_wall(){
 }
 
 void deviate_check(){
-  /*if(left_tooclose){
-    turnRight(25);
+  if(left_tooclose){
+    turnRight(right_defined_speed);
+    delay(10);
+    turnLeft(left_defined_speed);
+    delay(10);
+    moveForward(forward_defined_speed);
   }
   if(right_tooclose){
-    turnLeft(25);
-  } */
+    turnLeft(left_defined_speed);
+    delay(10);
+    turnRight(right_defined_speed);
+    delay(10);
+    moveForward(forward_defined_speed);
+  }
 }
 void maze(){
   if(leftMode){
