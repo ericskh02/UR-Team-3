@@ -29,8 +29,8 @@ bool right_has_wall = true;
 bool left_tooclose = false;
 bool right_tooclose = true;
 //Motor Setup
-#define motor2_in2 6
-#define motor2_in1 9  
+#define motor2_in3 9
+#define motor2_in4 6  
 #define motor1_in1 10
 #define motor1_in2 11
 
@@ -52,37 +52,37 @@ bool mazeSolved = true;
 void brake(){
   analogWrite(motor1_in1,255);
   analogWrite(motor1_in2,255);
-  analogWrite(motor2_in2,255);
-  analogWrite(motor2_in1,255);  
+  analogWrite(motor2_in3,255);
+  analogWrite(motor2_in4,255);  
 }
 
 // the connection of the motors is not well set uo and may need further re-soldering
 void moveForward(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
-  analogWrite(motor2_in2,speed);
-  analogWrite(motor2_in1,0);
+  analogWrite(motor2_in3,speed);
+  analogWrite(motor2_in4,0);
 }
 
 void turnLeft(int speed){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in2,0);
-  analogWrite(motor2_in1,speed);
+  analogWrite(motor2_in3,0);
+  analogWrite(motor2_in4,speed);
 }
 
 void turnRight(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
-  analogWrite(motor2_in2,speed);
-  analogWrite(motor2_in1,0);
+  analogWrite(motor2_in3,speed);
+  analogWrite(motor2_in4,0);
 } 
 
 void moveBackward(int speed){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in2,0);
-  analogWrite(motor2_in1,speed);  
+  analogWrite(motor2_in3,0);
+  analogWrite(motor2_in4,speed);  
 }
 
 void moveForward(unsigned long time, int speed){
@@ -194,6 +194,7 @@ void check_distance(){
   Serial.print("Right: ");
   Serial.println(right_distance);
 }
+
 void check_wall(){
   if(front_distance<front_defined_distance){
     front_has_wall = true;
@@ -217,11 +218,21 @@ void check_wall(){
     left_tooclose = true;
   } else left_tooclose = false;
 }
+
+void deviate_check(){
+  /*if(left_tooclose){
+    turnRight(25);
+  }
+  if(right_tooclose){
+    turnLeft(25);
+  } */
+}
 void maze(){
   if(leftMode){
-    if(!front_has_wall){ // First rule: if there is road to left
+    if(!front_has_wall){ // First rule: if there is road forward
       moveForward(100);
-    } else if (!left_has_wall){ // Second rule: if there is road forward
+      deviate_check();
+    } else if (!left_has_wall){ // Second rule: if there is road leftward
       turnLeft(100,left_defined_speed);
       moveForward(100,forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
@@ -238,13 +249,14 @@ void maze(){
     }
   }
 }
+
 void setup() {
   Serial.begin(9600);
   // pinMode of ultrasonic sensors are defined in NewPing library itself
   pinMode(motor1_in1,OUTPUT);
   pinMode(motor1_in2,OUTPUT);
-  pinMode(motor2_in2,OUTPUT);
-  pinMode(motor2_in1,OUTPUT);
+  pinMode(motor2_in3,OUTPUT);
+  pinMode(motor2_in4,OUTPUT);
   pinMode(TRIGGER_PIN_3, OUTPUT);
   pinMode(ECHO_PIN_3, INPUT);
 }
