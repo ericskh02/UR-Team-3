@@ -204,7 +204,6 @@ void loop() {
   Serial.println(front_distance);
   Serial.print("Right: ");
   Serial.println(right_distance);
-  delay(1000);
   if(Serial.available()){
     command = Serial.read();    
     executeCommand(command);
