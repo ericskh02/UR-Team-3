@@ -191,8 +191,7 @@ void check_distance(){
   delayMicroseconds(10);
   digitalWrite(TRIGGER_PIN_3, LOW);
   delayMicroseconds(2);
-  //Rewrite pulseIn
-  duration_1 = pulseIn(A1, HIGH);
+  duration_1 = pulseIn(A1, HIGH, 500);
   left_distance = (duration_1)*0.034/2;
   front_distance = front_ultrasonic.ping_cm();
   right_distance = right_ultrasonic.ping_cm();
