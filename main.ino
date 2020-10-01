@@ -1,5 +1,7 @@
 #include <NewPing.h>
 
+bool leftMode = true;
+
 //Ultrasonic Sensor Setup
 #define TRIGGER_PIN_1 2
 #define ECHO_PIN_1 3
@@ -12,7 +14,6 @@
 NewPing front_ultrasonic(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
 NewPing left_ultrasonic(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
 
-
 double duration_1;
 int left_distance = 0;
 int front_distance = 0;
@@ -21,7 +22,6 @@ int front_defined_distance = 20;
 int left_defined_distance = 20;
 int right_defined_distance = 20;
 int tooclose_defined_distance = 10;
-
 
 bool front_has_wall = false;
 bool left_has_wall = true;
@@ -218,14 +218,25 @@ void check_wall(){
   } else left_tooclose = false;
 }
 void maze(){
-  if(!front_has_wall){ // First rule: if there is road to left
-    moveForward(100);
+  if(leftMode){
+    if(!front_has_wall){ // First rule: if there is road to left
+      moveForward(100);
     } else if (!left_has_wall){ // Second rule: if there is road forward
       turnLeft(100,left_defined_speed);
       moveForward(100,forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
       turnRight(100,right_defined_speed);
-    }  
+    }
+  } else {
+    if(!front_has_wall){ // First rule: if there is road to left
+      moveForward(100);
+    } else if (!right_has_wall){ // Second rule: if there is road forward
+      turnRight(100,right_defined_speed);
+      moveForward(100,forward_defined_speed);
+      } else { //Third rule: if there is no road for left and forward
+      turnLeft(100,left_defined_speed);
+    }
+  }
 }
 void setup() {
   Serial.begin(9600);
