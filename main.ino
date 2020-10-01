@@ -12,8 +12,8 @@ bool leftMode = true;
 int defined_speed = 100; // For bluetooth control
 int turn_defined_speed = 50;
 int forward_defined_speed = 75;
-int left_defined_speed = 100;
-int right_defined_speed = 100;
+int left_defined_speed = 50;
+int right_defined_speed = 50;
 int backward_defined_speed = 50;
 
 int forward_defined_time = 250;
@@ -191,6 +191,7 @@ void check_distance(){
   delayMicroseconds(10);
   digitalWrite(TRIGGER_PIN_3, LOW);
   delayMicroseconds(2);
+  //Rewrite pulseIn
   duration_1 = pulseIn(A1, HIGH);
   left_distance = (duration_1)*0.034/2;
   front_distance = front_ultrasonic.ping_cm();
