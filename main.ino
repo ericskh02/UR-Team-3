@@ -67,15 +67,15 @@ void moveForward(int speed){
 void turnLeft(int speed){
   analogWrite(motor1_in1,0);
   analogWrite(motor1_in2,speed);
-  analogWrite(motor2_in2,speed);
-  analogWrite(motor2_in1,0);
+  analogWrite(motor2_in2,0);
+  analogWrite(motor2_in1,speed);
 }
 
 void turnRight(int speed){
   analogWrite(motor1_in1,speed);
   analogWrite(motor1_in2,0);
-  analogWrite(motor2_in2,0);
-  analogWrite(motor2_in1,speed);
+  analogWrite(motor2_in2,speed);
+  analogWrite(motor2_in1,0);
 } 
 
 void moveBackward(int speed){
@@ -176,18 +176,7 @@ void executeCommand(int command){
   }
 }
 
-void setup() {
-  Serial.begin(9600);
-  // pinMode of ultrasonic sensors are defined in NewPing library itself
-  pinMode(motor1_in1,OUTPUT);
-  pinMode(motor1_in2,OUTPUT);
-  pinMode(motor2_in2,OUTPUT);
-  pinMode(motor2_in1,OUTPUT);
-  pinMode(TRIGGER_PIN_3, OUTPUT);
-  pinMode(ECHO_PIN_3, INPUT);
-}
-
-void loop() {
+void check_distance(){
   digitalWrite(TRIGGER_PIN_3,LOW);
   delayMicroseconds(2);
   digitalWrite(TRIGGER_PIN_3,HIGH);
@@ -204,21 +193,19 @@ void loop() {
   Serial.println(front_distance);
   Serial.print("Right: ");
   Serial.println(right_distance);
-  if(Serial.available()){
-    command = Serial.read();    
-    executeCommand(command);
-  }
-  if(front_distance>front_defined_distance){
+}
+void check_wall(){
+  if(front_distance<front_defined_distance){
     front_has_wall = true;
   } else {
     front_has_wall = false;
   }
-  if(left_distance>left_defined_distance){
+  if(left_distance<left_defined_distance){
     left_has_wall = true;  
   } else {
     left_has_wall = false;
   }
-  if(right_distance>right_defined_distance){
+  if(right_distance<right_defined_distance){
     right_has_wall = true;
   } else {
     right_has_wall = false;
@@ -229,15 +216,37 @@ void loop() {
   if(right_distance - left_distance > tooclose_defined_distance){
     left_tooclose = true;
   } else left_tooclose = false;
-  if(!mazeSolved){ // Zero rule: if the maze is not completed
-    if(!left_has_wall){ // First rule: if there is road to left
-      moveForward(100,forward_defined_speed);
+}
+void maze(){
+  if(!front_has_wall){ // First rule: if there is road to left
+    moveForward(100);
+    } else if (!left_has_wall){ // Second rule: if there is road forward
       turnLeft(100,left_defined_speed);
       moveForward(100,forward_defined_speed);
-    } else if (!front_has_wall){ // Second rule: if there is road forward
-      moveForward(forward_defined_speed);
       } else { //Third rule: if there is no road for left and forward
       turnRight(100,right_defined_speed);
     }  
+}
+void setup() {
+  Serial.begin(9600);
+  // pinMode of ultrasonic sensors are defined in NewPing library itself
+  pinMode(motor1_in1,OUTPUT);
+  pinMode(motor1_in2,OUTPUT);
+  pinMode(motor2_in2,OUTPUT);
+  pinMode(motor2_in1,OUTPUT);
+  pinMode(TRIGGER_PIN_3, OUTPUT);
+  pinMode(ECHO_PIN_3, INPUT);
+}
+
+void loop() {
+  if(Serial.available()){
+    command = Serial.read();    
+    executeCommand(command);
+  }
+
+  if(!mazeSolved){ // Zero rule: if the maze is not completed
+    check_distance();
+    check_wall();
+    maze();
   }
 }
