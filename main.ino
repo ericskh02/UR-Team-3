@@ -230,16 +230,16 @@ void check_wall(){
 void deviate_check(){
   if(left_tooclose){
     turnRight(right_defined_speed);
-    delay(10);
+    delay(5);
     turnLeft(left_defined_speed);
-    delay(10);
+    delay(5);
     moveForward(forward_defined_speed);
   }
   if(right_tooclose){
     turnLeft(left_defined_speed);
-    delay(10);
+    delay(5);
     turnRight(right_defined_speed);
-    delay(10);
+    delay(5);
     moveForward(forward_defined_speed);
   }
 }
