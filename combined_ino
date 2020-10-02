@@ -47,9 +47,9 @@ double duration_1;
 int left_distance = 0;
 int front_distance = 0;
 int right_distance = 0;
-int front_defined_distance = 100;
-int left_defined_distance = 50;
-int right_defined_distance = 50;
+int front_defined_distance = 30;
+int left_defined_distance = 40;
+int right_defined_distance = 40;
 int tooclose_defined_distance = 5;
 
 bool front_has_wall = false;
@@ -57,7 +57,7 @@ bool left_has_wall = true;
 bool right_has_wall = true;
 bool left_tooclose = false;
 bool right_tooclose = true;
-
+bool front_tooclose = false;
 
 //Time delay setup
 unsigned long previousMillis = 0;
@@ -254,6 +254,9 @@ void check_wall(){
   if(right_distance - left_distance > tooclose_defined_distance || left_distance <= 3){
     left_tooclose = true;
   } else left_tooclose = false;
+  if(front_distance < 10 || left_distance < 3 || right_distance < 3){
+    front_tooclose = true;
+  } else front_tooclose = false;
 }
 
 void deviate_check(){
@@ -262,22 +265,22 @@ void deviate_check(){
   if(left_tooclose){
     Serial.write("Left tooclose");
     moveBackward(backward_defined_speed);
-    delay(100);
+    delay(50);
     turnRight(right_defined_speed);
-    delay(100);
+    delay(50);
     turnLeft(left_defined_speed);
-    delay(100);
+    delay(50);
     moveForward(forward_defined_speed);
     delay(25);
   }
   if(right_tooclose){
     Serial.write("Right tooclose");
     moveBackward(backward_defined_speed);
-    delay(100);
+    delay(50);
     turnLeft(left_defined_speed);
-    delay(100);
+    delay(50);
     turnRight(right_defined_speed);
-    delay(100);
+    delay(50);
     moveForward(forward_defined_speed);
     delay(25);
   }
@@ -294,8 +297,11 @@ void maze(){
     return;
   }
   if(leftMode){
-    if(!left_has_wall){ // First rule: if there is road left
+    if(front_tooclose){
+      moveBackward(200,backward_defined_speed);
+    } else if(!left_has_wall){ // First rule: if there is road left
       Serial.write("First rule: left");
+      moveForward(100,forward_defined_speed);
       turnLeft(left_defined_time,left_defined_speed);
       moveForward(forward_defined_time,forward_defined_speed);
     } else if (!front_has_wall){ // Second rule: if there is road front
