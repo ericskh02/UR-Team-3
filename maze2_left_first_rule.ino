@@ -38,7 +38,7 @@ double duration_1;
 int left_distance = 0;
 int front_distance = 0;
 int right_distance = 0;
-int front_defined_distance = 30;
+int front_defined_distance = 25;
 int left_defined_distance = 40;
 int right_defined_distance = 40;
 int tooclose_defined_distance = 5;
@@ -232,39 +232,42 @@ void deviate_check(){
   check_distance();
   check_wall();
   if(left_tooclose){
+    Serial.println("Left tooclose");
     moveBackward(backward_defined_speed);
     delay(50);
     turnRight(right_defined_speed);
     delay(25);
     moveForward(forward_defined_speed);
-    delay(200);
+    delay(100);
   }
   if(right_tooclose){
+    Serial.println("Right tooclose");
     moveBackward(backward_defined_speed);
     delay(50);
     turnLeft(left_defined_speed);
     delay(25);
     moveForward(forward_defined_speed);
-    delay(200);
+    delay(100);
   }
 }
 void maze(){
+  Serial.println("Start");
+  moveForward(20);
   check_distance();
   check_wall();
   if(leftMode){
-    if(!left_has_wall){ // First rule: if there is road forward
-      Serial.print("count started");
+    if(!left_has_wall){ // First rule: if there is road left
+      Serial.println("First rule: left");
       turnLeft(left_defined_time,left_defined_speed);
-      Serial.print("count finished");
       moveForward(forward_defined_time,forward_defined_speed);
-    } else if (!front_has_wall){ // Second rule: if there is road leftward
+    } else if (!front_has_wall){ // Second rule: if there is road front
+      Serial.println("Second rule: front");
       moveForward(forward_defined_speed);
       delay(50);
       deviate_check();
       } else { //Third rule: if there is no road for left and forward
-      Serial.print("count started");
+      Serial.println("Third rule: right");
       turnRight(right_defined_time,right_defined_speed);
-      Serial.print("count finished");
     }
   } else {
     if(!front_has_wall){ // First rule: if there is road to left
