@@ -18,8 +18,8 @@ int right_defined_speed = 50;
 int backward_defined_speed = 50;
 
 int forward_defined_time = 200;
-int left_defined_time = 150;
-int right_defined_time = 150;
+int left_defined_time = 200;
+int right_defined_time = 200;
 int backward_defined_time = 200;
 
 //Ultrasonic Sensor Setup
@@ -205,17 +205,17 @@ void check_distance(){
 }
 
 void check_wall(){
-  if(front_distance > 2 && front_distance<front_defined_distance){
+  if(front_distance<front_defined_distance){
     front_has_wall = true;
   } else {
     front_has_wall = false;
   }
-  if(left_distance > 2 && left_distance<left_defined_distance){
+  if(left_distance<left_defined_distance){
     left_has_wall = true;  
   } else {
     left_has_wall = false;
   }
-  if(right_distance > 2 && right_distance<right_defined_distance){
+  if(right_distance<right_defined_distance){
     right_has_wall = true;
   } else {
     right_has_wall = false;
@@ -229,26 +229,28 @@ void check_wall(){
 }
 
 void deviate_check(){
+  /*
   check_distance();
   check_wall();
   if(left_tooclose){
     Serial.write("Left tooclose");
     moveBackward(backward_defined_speed);
-    delay(5);
+    delay(50);
     turnRight(right_defined_speed);
-    delay(10);
+    delay(100);
     moveForward(forward_defined_speed);
-    delay(5);
+    delay(25);
   }
   if(right_tooclose){
     Serial.write("Right tooclose");
     moveBackward(backward_defined_speed);
-    delay(5);
+    delay(50);
     turnLeft(left_defined_speed);
-    delay(10);
+    delay(100);
     moveForward(forward_defined_speed);
-    delay(5);
+    delay(25);
   }
+  */
 }
 void maze(){
   Serial.write("Start");
