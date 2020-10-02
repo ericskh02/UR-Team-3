@@ -17,10 +17,10 @@ int left_defined_speed = 50;
 int right_defined_speed = 50;
 int backward_defined_speed = 50;
 
-int forward_defined_time = 250;
-int left_defined_time = 175;
-int right_defined_time = 175;
-int backward_defined_time = 250;
+int forward_defined_time = 200;
+int left_defined_time = 100;
+int right_defined_time = 100;
+int backward_defined_time = 200;
 
 //Ultrasonic Sensor Setup
 #define TRIGGER_PIN_1 2
@@ -205,25 +205,25 @@ void check_distance(){
 }
 
 void check_wall(){
-  if(front_distance<front_defined_distance){
+  if(front_distance > 2 && front_distance<front_defined_distance){
     front_has_wall = true;
   } else {
     front_has_wall = false;
   }
-  if(left_distance<left_defined_distance){
+  if(left_distance > 2 && left_distance<left_defined_distance){
     left_has_wall = true;  
   } else {
     left_has_wall = false;
   }
-  if(right_distance<right_defined_distance){
+  if(right_distance > 2 && right_distance<right_defined_distance){
     right_has_wall = true;
   } else {
     right_has_wall = false;
   }
-  if(left_distance - right_distance > tooclose_defined_distance){
+  if(left_distance - right_distance > tooclose_defined_distance || right_distance <= 3){
     right_tooclose = true;
   } else right_tooclose = false;
-  if(right_distance - left_distance > tooclose_defined_distance){
+  if(right_distance - left_distance > tooclose_defined_distance || left_distance <= 3){
     left_tooclose = true;
   } else left_tooclose = false;
 }
@@ -236,18 +236,18 @@ void deviate_check(){
     moveBackward(backward_defined_speed);
     delay(50);
     turnRight(right_defined_speed);
-    delay(25);
-    moveForward(forward_defined_speed);
     delay(100);
+    moveForward(forward_defined_speed);
+    delay(50);
   }
   if(right_tooclose){
     Serial.println("Right tooclose");
     moveBackward(backward_defined_speed);
     delay(50);
     turnLeft(left_defined_speed);
-    delay(25);
-    moveForward(forward_defined_speed);
     delay(100);
+    moveForward(forward_defined_speed);
+    delay(50);
   }
 }
 void maze(){
