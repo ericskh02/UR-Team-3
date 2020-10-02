@@ -100,7 +100,7 @@ void turnRight(int speed){
 
 void moveBackward(int speed){
   analogWrite(left_in1,0);
-  analogWrite(left_in2,speed);  
+  analogWrite(left_in2,speed*1.15);  
   analogWrite(right_in1,0);
   analogWrite(right_in2,speed);
 }
@@ -162,6 +162,7 @@ void justin_startMaze(){
 void setMazeCompleted(){
   mazeSolved = true;
   justin_mazeSolved = true;
+  brake();
 }
 
 //Bluetooth Connection and Command Setup
