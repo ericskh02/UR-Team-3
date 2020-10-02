@@ -12,7 +12,7 @@ bool leftMode = true;
 int defined_speed = 100; // For bluetooth control
 int turn_defined_speed = 50;
 //For auto maze
-int forward_defined_speed = 75;
+int forward_defined_speed = 50;
 int left_defined_speed = 50;
 int right_defined_speed = 50;
 int backward_defined_speed = 50;
