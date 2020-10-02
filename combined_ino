@@ -33,8 +33,8 @@ int backward_defined_time = 200;
 
 int back = 0;
 
-int justin_left_defined_distance = 30;
-int justin_front_defined_distance = 18;
+int justin_left_defined_distance = 27;
+int justin_front_defined_distance = 22;
 int justin_right_defined_distance = 30;
 
 int justin_tooclose_defined_distance = 1;
@@ -110,10 +110,10 @@ void moveForward(unsigned long time, int speed){
     moveForward(speed);
     if(millis() - previousMillis > time){
       previousMillis += time;
-      brake();
       break;
     }
   }
+  brake();
 }
 
 void turnLeft(unsigned long time,int speed){
@@ -202,10 +202,10 @@ void executeCommand(int command){
 }
 
 long getDistance(long distance, int direct){
-  
-  while(distance > 250 && distance < 0){
+  if(distance > 250 || distance < 0){
     if(back > 3){     //if run getDistance() for three times
       moveBackward(150);
+      back = 0;
     }
     
     switch(direct){
@@ -222,8 +222,7 @@ long getDistance(long distance, int direct){
       distance = sr04_right.Distance();
       break;
     }
-  }
-  
+  }  
   return distance;
 }
 
@@ -277,13 +276,11 @@ void deviate_check(){
   if(right_tooclose){
     Serial.write("Right tooclose");
     moveBackward(backward_defined_speed);
-    delay(50);
     turnLeft(left_defined_speed);
     delay(50);
     turnRight(right_defined_speed);
     delay(50);
     moveForward(forward_defined_speed);
-    delay(25);
   }
 }
 void maze(){
@@ -298,13 +295,18 @@ void maze(){
     return;
   }
   if(leftMode){
+    brake();
+    delay(200);
     if(front_tooclose){
       moveBackward(200,backward_defined_speed);
     } else if(!left_has_wall){ // First rule: if there is road left
       Serial.write("First rule: left");
-      moveForward(100,forward_defined_speed);
-      turnLeft(left_defined_time,left_defined_speed);
-      moveForward(forward_defined_time,forward_defined_speed);
+      moveForward(forward_defined_speed);
+      delay(100);
+      turnLeft(left_defined_speed);
+      delay(left_defined_time);
+      moveForward(forward_defined_speed);
+      delay(forward_defined_time);
     } else if (!front_has_wall){ // Second rule: if there is road front
       Serial.write("Second rule: front");
       moveForward(forward_defined_speed);
@@ -312,7 +314,8 @@ void maze(){
       deviate_check();
       } else { //Third rule: if there is no road for left and forward
       Serial.write("Third rule: right");
-      turnRight(right_defined_time,right_defined_speed);
+      turnRight(right_defined_speed);
+      delay(right_defined_time);
     }
   } else {
     if(!right_has_wall){ // First rule: if there is road to right
@@ -333,9 +336,11 @@ void movement(){
   if (front_distance < justin_front_defined_distance){
     brake();
     if(left_distance < justin_left_defined_distance && left_distance > 0){
-      turnRight(75);
+      Serial.write("right rule");
+      turnRight(55);
     }else{
-      turnLeft(75);
+      Serial.write("left rule");
+      turnLeft(55);
     }
   }else{
     /*
@@ -347,6 +352,7 @@ void movement(){
       deviation_to_right(100);
     }else{
     */
+    Serial.write("front rule");
       moveForward(100);
     //}
   }
