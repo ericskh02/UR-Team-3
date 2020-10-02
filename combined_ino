@@ -47,9 +47,9 @@ double duration_1;
 int left_distance = 0;
 int front_distance = 0;
 int right_distance = 0;
-int front_defined_distance = 25;
-int left_defined_distance = 40;
-int right_defined_distance = 40;
+int front_defined_distance = 100;
+int left_defined_distance = 50;
+int right_defined_distance = 50;
 int tooclose_defined_distance = 5;
 
 bool front_has_wall = false;
@@ -64,6 +64,7 @@ unsigned long previousMillis = 0;
 
 //Maze
 bool mazeSolved = true;
+bool firstTurn = true;
 bool justin_mazeSolved = true;
 
 //Movement of Robot
@@ -150,6 +151,9 @@ void moveBackward(unsigned long time, int speed){
 
 void startMaze(){
   mazeSolved = false;
+  firstTurn = false;
+  Serial.write("Start");
+  moveForward(50);
 }
 
 void justin_startMaze(){
@@ -163,7 +167,6 @@ void setMazeCompleted(){
 //Bluetooth Connection and Command Setup
 byte command;
 void executeCommand(int command){
-  Serial.println(command);
   switch(command){
     case 0:
       break;
@@ -207,15 +210,15 @@ long getDistance(long distance, int direct){
     switch(direct){
     case 1:
       back++;
-      distance = sr04_left.Distance();//读取超声波距离
+      distance = sr04_left.Distance();
       break;
     case 2:
       back++;
-      distance = sr04_front.Distance();//读取超声波距离
+      distance = sr04_front.Distance();
       break;
     case 3:
       back++;
-      distance = sr04_right.Distance();//读取超声波距离
+      distance = sr04_right.Distance();
       break;
     }
   }
@@ -227,12 +230,6 @@ void check_distance(){
   left_distance = getDistance(sr04_left.Distance(),1);
   front_distance = getDistance(sr04_front.Distance(),2);
   right_distance = getDistance(sr04_right.Distance(),3);
-  Serial.print("Left: ");
-  Serial.println(left_distance);
-  Serial.print("Front: ");
-  Serial.println(front_distance);
-  Serial.print("Right: ");
-  Serial.println(right_distance);
 }
 
 void check_wall(){
@@ -260,14 +257,15 @@ void check_wall(){
 }
 
 void deviate_check(){
-  /*
   check_distance();
   check_wall();
   if(left_tooclose){
     Serial.write("Left tooclose");
     moveBackward(backward_defined_speed);
-    delay(50);
+    delay(100);
     turnRight(right_defined_speed);
+    delay(100);
+    turnLeft(left_defined_speed);
     delay(100);
     moveForward(forward_defined_speed);
     delay(25);
@@ -275,19 +273,26 @@ void deviate_check(){
   if(right_tooclose){
     Serial.write("Right tooclose");
     moveBackward(backward_defined_speed);
-    delay(50);
+    delay(100);
     turnLeft(left_defined_speed);
+    delay(100);
+    turnRight(right_defined_speed);
     delay(100);
     moveForward(forward_defined_speed);
     delay(25);
   }
-  */
 }
 void maze(){
-  Serial.write("Start");
-  moveForward(20);
   check_distance();
   check_wall();
+  if(!firstTurn){
+    if(!front_has_wall){
+      moveForward(50);
+    } else {
+      firstTurn = true;
+    }
+    return;
+  }
   if(leftMode){
     if(!left_has_wall){ // First rule: if there is road left
       Serial.write("First rule: left");
