@@ -18,8 +18,8 @@ int right_defined_speed = 50;
 int backward_defined_speed = 50;
 
 int forward_defined_time = 200;
-int left_defined_time = 100;
-int right_defined_time = 100;
+int left_defined_time = 150;
+int right_defined_time = 150;
 int backward_defined_time = 200;
 
 //Ultrasonic Sensor Setup
@@ -232,52 +232,52 @@ void deviate_check(){
   check_distance();
   check_wall();
   if(left_tooclose){
-    Serial.println("Left tooclose");
+    Serial.write("Left tooclose");
     moveBackward(backward_defined_speed);
-    delay(50);
+    delay(5);
     turnRight(right_defined_speed);
-    delay(100);
+    delay(10);
     moveForward(forward_defined_speed);
-    delay(50);
+    delay(5);
   }
   if(right_tooclose){
-    Serial.println("Right tooclose");
+    Serial.write("Right tooclose");
     moveBackward(backward_defined_speed);
-    delay(50);
+    delay(5);
     turnLeft(left_defined_speed);
-    delay(100);
+    delay(10);
     moveForward(forward_defined_speed);
-    delay(50);
+    delay(5);
   }
 }
 void maze(){
-  Serial.println("Start");
+  Serial.write("Start");
   moveForward(20);
   check_distance();
   check_wall();
   if(leftMode){
     if(!left_has_wall){ // First rule: if there is road left
-      Serial.println("First rule: left");
+      Serial.write("First rule: left");
       turnLeft(left_defined_time,left_defined_speed);
       moveForward(forward_defined_time,forward_defined_speed);
     } else if (!front_has_wall){ // Second rule: if there is road front
-      Serial.println("Second rule: front");
+      Serial.write("Second rule: front");
       moveForward(forward_defined_speed);
       delay(50);
       deviate_check();
       } else { //Third rule: if there is no road for left and forward
-      Serial.println("Third rule: right");
+      Serial.write("Third rule: right");
       turnRight(right_defined_time,right_defined_speed);
     }
   } else {
-    if(!front_has_wall){ // First rule: if there is road to left
-      moveForward(forward_defined_speed);
-    } else if (!right_has_wall){ // Second rule: if there is road forward
-      brake();
-      turnRight(right_defined_time,right_defined_speed);
+    if(!right_has_wall){ // First rule: if there is road to right
+      turnRight(right_defined_time, right_defined_speed);
       moveForward(forward_defined_time,forward_defined_speed);
-      } else { //Third rule: if there is no road for left and forward
-      brake();
+    } else if (!front_has_wall){ // Second rule: if there is road forward
+      moveForward(forward_defined_time,forward_defined_speed);
+      delay(50);
+      deviate_check();
+      } else { //Third rule: if there is no road for right and forward
       turnLeft(left_defined_time,left_defined_speed);
     }
   }
